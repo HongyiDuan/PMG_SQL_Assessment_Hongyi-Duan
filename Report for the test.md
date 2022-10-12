@@ -13,7 +13,9 @@ Answer: This is also a straightforward case. Using a group by statement to gener
 > SELECT SUBSTRING(store_location,15) as geo, <br/>
 >        SUM(revenue) as revenue_geo <br/>
 > FROM store_revenue <br/>
-> GROUP BY store_location;<br/>  
+> GROUP BY store_location;<br/>
+
+I use the SUBSTRING command to extract only the state name from the column store_location so that it matches the geo variable form in the marketing_data table. 
 *  Question #3
  Merge these two datasets so we can see impressions, clicks, and revenue together by date
 and geo.
