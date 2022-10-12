@@ -23,18 +23,15 @@ marketing_data contains ad impression and click data by date and location:
 >  clicks float
 > );
 
-### Please provide a SQL statement under each question.
+### Below are my SQL statements for each question. 
+### Note: All the statements below are written in mysql environment.
 
-* Question #0 (Already done for you as an example)
- Select the first 2 rows from the marketing data
-​
->  select *
->  from marketing_data
-> limit 2;
 ​
 *  Question #1
  Generate a query to get the sum of the clicks of the marketing data
 ​
+> SELECT SUM(clicks) as sum_clicks
+> FROM marketing_data;
 *  Question #2
  Generate a query to gather the sum of revenue by geo from the store_revenue table
 ​
