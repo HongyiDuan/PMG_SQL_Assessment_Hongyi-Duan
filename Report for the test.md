@@ -2,8 +2,6 @@
 
 ### Below are my SQL statements for each question. 
 ### Note: All the statements below are written in mysql environment.
-
-​
 *  Question #1
  Generate a query to get the sum of the clicks of the marketing data
 ​
