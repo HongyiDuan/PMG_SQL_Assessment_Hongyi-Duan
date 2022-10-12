@@ -57,7 +57,10 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 >ON T2.date=T1.date AND T1.geo=T2.geo;
 The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT JOIN command, if in the form A LEFT JOIN B, is  able to capture all the rows from  table A. So I union the table A (T1 LEFT JOIN T2) and the table B (T2 LEFT JOIN T1) to make sure I have got all the rows from the two tables: T1, T2 in my final results. 
 #### Q 3.2 Version: USING UNION OF Two Tables including the brand_id
-<pre>
+* T1 still Follows the same logic with Q 3.1 Version above.
+* Since in this version, I decide to include the brand_id column from the store_revenue table. Right now, the revenue term refers to the amount of revenue by each state on each day, with different brand ids.
+* The UNION part is the same as the previous method.
+><pre>
 > WITH T1 AS(
 >SELECT date,                                           
 >       geo, 
@@ -90,6 +93,8 @@ The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT
 >       revenue
 >FROM T2 LEFT JOIN T1
 >ON T2.date=T1.date AND T1.geo=T2.geo;
+
+One thing to notice is that in the resulting table, for each date and geo, there would be two rows sharing the same number of impressions and clicks. The only difference between the two rows is the revenue by different brand_ids. That is because in the marketing_data table, there are no columns named brand_id and I can not identify the specific amount of impressions and clicks for each brand. As a result, I change the name for the impressions and clicks to impressions_statewise and clicks_statewise so that the reader can understand.
 * Question #4
  In your opinion, what is the most efficient store and why?
 ​
