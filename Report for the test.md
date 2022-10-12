@@ -21,7 +21,7 @@ I use the SUBSTRING command to extract only the state name from the column store
 ### [3]  Question #3 Merge these two datasets so we can see impressions, clicks, and revenue together by date and geo. Please ensure all records from each table are accounted for.
 ​
 Answer: As mentioned at the beginning, I write my commands in MySQL environment. Since MySQL does not have a FULL OUTER JOIN command, I mainly use the UNION of two LEFT JOIN tables to cover all the observations from the two table. I have used three methods for answering Question 3, with the initial two to be the UNION of two LEFT JOIN tables and the last to be the FULL JOIN method.
-#### Q 3.1 Version: USING UNION OF TWO LEFT JOIN TABLES
+#### Q 3.1 Version: Using UNION of two LEFT JOIN tables
 * Here is the first method of UNION two LEFT JOIN tables T1 and T2. 
 * I create T1 to select the four columns that I need from the marketing_data table. 
 * T2 is used to select the date, geo, and the sum of revenue group by date and geo (combing the revenue of all the brands sold on a specific day at a specific state).
@@ -56,7 +56,7 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 >FROM T2 LEFT JOIN T1
 >ON T2.date=T1.date AND T1.geo=T2.geo;
 The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT JOIN command, if in the form A LEFT JOIN B, is  able to capture all the rows from  table A. So I union the table A (T1 LEFT JOIN T2) and the table B (T2 LEFT JOIN T1) to make sure I have got all the rows from the two tables: T1, T2 in my final results. 
-#### Q 3.2 Version: USING UNION OF Two Tables including the brand_id
+#### Q 3.2 Version: Using UNION OF Two Tables including the brand_id
 * T1 still Follows the same logic with Q 3.1 Version above.
 * Since in this version, I decide to include the brand_id column from the store_revenue table. Right now, the revenue term refers to the amount of revenue by each state on each day, with different brand ids.
 * The UNION part is the same as the previous method.
