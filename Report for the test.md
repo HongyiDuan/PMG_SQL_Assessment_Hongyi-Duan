@@ -315,7 +315,7 @@ of clicks for each state.
 >WITH T1 AS(
 >SELECT date as date_m, 
 >	     geo as geo_m, 
->        clicks
+>        SUM(clicks) as clicks
 >FROM marketing_data
 >GROUP BY date_m,geo_m
 >),
@@ -354,7 +354,7 @@ Here, the three temporary tables, although look complicated, are the tables that
 >WITH T1 AS(
 >SELECT date as date_m, 
 >        geo as geo_m,
->        clicks
+>        SUM(clicks) as clicks
 >FROM marketing_data
 >),
 >T2 AS(
