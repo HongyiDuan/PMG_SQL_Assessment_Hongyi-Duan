@@ -235,6 +235,22 @@ Here, the three temporary tables, although look complicated, are the tables that
 >GROUP BY geo_s, brand_id
 >) AS cte;
 * The third indicator that I use is the revenue for stores in each state.
-* Question #5 (Challenge)
- Generate a query to rank in order the top 10 revenue producing states
+#### [5] Question #5 (Challenge) Generate a query to rank in order the top 10 revenue producing states
 ​
+Answer: 
+* As usual, I create a temporary table to save the store_location and revenue of each store_location by a groupby command.
+* Then, I use a DENSE_RANK command to rank the revenue produced by each state. The reason to use a DENSE_RANK command instead of a "LIMIT 10" command is to make the resulting table more readable.
+* Last but not least, I select the rows from T2 with a where clause to include only the ones with rankings less than or equal to 10.
+><pre>
+>WITH T1 AS(
+>SELECT store_location, SUM(revenue) as revenue_state
+>FROM store_revenue 
+>GROUP BY store_location   
+>),
+>T2 AS(
+>SELECT SUBSTRING(store_location,15) as State, 
+>        revenue_state as revenue,
+>        DENSE_RANK() OVER (ORDER BY revenue_state DESC) as RANKINGS_REVENUE
+>FROM T1)
+>SELECT * FROM T2  
+>WHERE RANKINGS_REVENUE<=10;
