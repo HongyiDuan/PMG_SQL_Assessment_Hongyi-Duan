@@ -8,6 +8,9 @@ Answer: It is a very straightforward case. I simply use SUM command for the vari
 > <pre>
 > SELECT SUM(clicks) as sum_clicks
 > FROM marketing_data;
+Result:
+csvtomd Q1 Answer.csv
+
 ### [2]  Question #2 Generate a query to gather the sum of revenue by geo from the store_revenue table
 ​
 Answer: This is also a straightforward case. Using a group by statement to generate the sum regarding each state.
@@ -18,6 +21,9 @@ Answer: This is also a straightforward case. Using a group by statement to gener
 > GROUP BY store_location;
 
 I use the SUBSTRING command to extract only the state name from the column store_location so that it matches the geo variable form in the marketing_data table. 
+Result:
+
+
 ### [3]  Question #3 Merge these two datasets so we can see impressions, clicks, and revenue together by date and geo. Please ensure all records from each table are accounted for.
 ​
 Answer: As mentioned at the beginning, I write my commands in MySQL environment. Since MySQL does not have a FULL OUTER JOIN command, I mainly use the UNION of two LEFT JOIN tables to cover all the observations from the two table. I have used three methods for answering Question 3, with the initial two to be the UNION of two LEFT JOIN tables and the last to be the FULL JOIN method.
@@ -254,3 +260,6 @@ Answer:
 >FROM T1)
 >SELECT * FROM T2  
 >WHERE RANKINGS_REVENUE<=10;
+
+
+
