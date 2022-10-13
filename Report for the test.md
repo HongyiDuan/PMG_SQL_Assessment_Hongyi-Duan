@@ -133,17 +133,64 @@ Answer: For this open-end question, I create three different indicators for meas
 ><pre>
 >WITH T1 AS( 
 >SELECT geo,
->       SUM(impressions) as impressions_sum,
->       SUM(clicks) as clicks_sum
+>        SUM(impressions) as impressions_sum,
+>        SUM(clicks) as clicks_sum
 >FROM marketing_data
 >GROUP BY geo
 >)
 >SELECT geo,
->       impressions_sum, 
->       clicks_sum,
->       ROUND(impressions_sum/clicks_sum,2) as IC_ratio,
->       DENSE_RANK() OVER (ORDER BY impressions_sum/clicks_sum ASC) as rankings_IC_rate
+>        impressions_sum, 
+>        clicks_sum,
+>        ROUND(impressions_sum/clicks_sum,2) as IC_ratio,
+>        DENSE_RANK() OVER (ORDER BY impressions_sum/clicks_sum ASC) as rankings_IC_rate
 >FROM T1;
+#### Q 4.1.2 Version: First indicator, different scenario——> Impressions/clicks ratio, for each state and date
+* Following a similar structure with Q 4.1.1, I have measured the same IC rate, but the ratio right now is based on each state and each date.
+* I also rename the column to make them consistant with other codes in Question 4.
+><pre>
+>SELECT geo,
+>        date,
+>        impressions as impressions_sum,
+>        clicks as clicks_sum,
+>        ROUND(impressions/clicks,2) as IC_ratio,
+>        DENSE_RANK() OVER (ORDER BY impressions/clicks ASC) as rankings_IC_rate
+>FROM marketing_data;
+#### Q 4.2.1 Version: CR_Rate by each state
+* The second indicator that I use to measure the efficiency is the CR ratio, which is defined as the sum of clicks divided by the sum
+of revenue. 
+* This ratio measures how many clicks that the stores need to generate an addtional unit of revenue.
+* Again, with lower RC_ratio, the stores in that state is more efficient becasue it would take fewer clicks to generate an addtional revenue. That is the reason why I create the rankings of the stores in each state by ascending RC_rate.
+* Also, another important assumption that I make for this indicator is that in the Question 3, we can find there exist mismatch between marketing_data table and store_revenue table. I simply keep the rows of the merging result with non-NULL values instead of including the NULL values inside. Since CR ratio is a fraction, NULL value on the denominator is hard to deal with.
+><pre>
+>WITH T1 AS(
+>SELECT date as date_m, 
+>	     geo as geo_m, 
+>        clicks
+>        FROM marketing_data
+>),
+>T2 AS(
+>SELECT date as date_s,
+>        SUBSTRING(store_location,15) as geo_s,
+>        SUM(revenue) as revenue
+>FROM store_revenue
+>GROUP BY date, geo_s   
+>), 
+>T3 AS(
+>SELECT geo_m as geo,                                       
+>        SUM(clicks) as clicks_sum, 
+>        SUM(revenue) as revenue_sum
+>        FROM T1 FULL JOIN T2
+>ON date_m=date_s AND geo_m=geo_s
+>GROUP BY geo
+>)
+>SELECT geo, 
+>        cicks_sum,
+>        revenue_sum,
+>        ROUND(clicks_sum/revenue_sum,5) as cr_transition_rate,
+>        DENSE_RANK() OVER (ORDER BY clicks_sum/revenue_sum ASC) as RANKINGS_CR
+>FROM T3;
+
+Here, the three temporary tables, although look complicated, are the tables that I create use FULL JOIN in Question 3.3. Since this ratio requires the revenue column from the store_revenue table and the clicks column from the marketing_data table, I need the merging table to contain all the non-NULL values.
 * Question #5 (Challenge)
  Generate a query to rank in order the top 10 revenue producing states
 ​
