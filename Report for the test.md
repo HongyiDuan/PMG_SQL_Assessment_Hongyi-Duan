@@ -5,6 +5,7 @@
 ## Note 2: For each question, I have attached not only my statements but also the output tables belows. As for the specific output table, you can find that in the csv files in this repository.
 ## Note 3: Each bullet point in my answer explains the logic of my statement,limitations of the statements, and the explanation of the output
 ## Note 4: For all the rankings in this project, I use DENSE RANKING to make sure it is easier to understand and readers can get the rankings immediately instead of doing mathematics when equal case involved.
+## Note 5: The output that I get is to use export button in the mysql workbench. It automatically generates a csv file, which makes the date column in a little bit different format compared to those in marketing_data and store_revenue.
 ### [1] Question #1 Generate a query to get the sum of the clicks of the marketing data
 ​ 
 Answer: It is a very straightforward case. I simply use SUM command for the variable clicks in the marketing_data table.
@@ -233,7 +234,7 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 Answer: For this open-end question, I create three different indicators for measuring the effiency of the stores for each state. For each of the indicator, I will explain the definition and corresponding explanation of logics behind it.
 ### An important assumption that I make for this question is that since the store_revenue does not contain a column named store_id, I measure all three indicators on the state level. Then, my effciency in this problem would be "the efficiency of all the stores in each state". 
 ### If I assume the id column in the store_revenue table to be the store_id, then the outcome would offer no use since each store can only offer their performance at a specific date instead of during a period.
-#### Q 4.1.1 Version: First indicator——> Impressions_clicks ratio, for each state only
+#### Q 4.1.1 Version: First indicator: Impressions_clicks through ratio, for each state only
 * IC_ratio (Impressions_clicks ratio) is defined as the percentage of people clicks after watching the advertisements of the stores (impressions).
 * Thus, by definition, a higher Impressions_clicks ratio reflects a higher effiency since more clicks the stores would earn for each advertisement they post or some other marketing methods.
 * Same as above, I create a temporary table T1 storing the sum of impressions and clicks for each state during the total time periods provided in the marketing_data table.
@@ -260,7 +261,7 @@ Answer: For this open-end question, I create three different indicators for meas
 | CA  | 	22569           | 	310        | 	1.37     | 	3                |
 | NY  | 	20028           | 	242        | 	1.21     | 	4                |
 
-#### Q 4.1.2 Version: First indicator, different scenario——> Impressions/clicks ratio, for each state and date
+#### Q 4.1.2 Version: First indicator, different scenario:Impressions/clicks ratio, for each state and date
 * Following a similar structure with Q 4.1.1, I have measured the same IC ratio, but the ratio right now is based on each state and each date.
 * The reason to include the date variable is to see the "fluctuations" of the IC ratio among the 5 day interval. Is it stable for each state or a state would have a very high IC ratio for one day and lower ones for the remaining.
 * I also rename the column to make them consistant with other codes in Question 4.
