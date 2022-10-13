@@ -302,16 +302,17 @@ Answer: For this open-end question, I create three different indicators for meas
 
 #### Q 4.2.1 Version: CR_Rate by each state
 * The second indicator that I use to measure the efficiency is the CR ratio, which is defined as the sum of clicks divided by the sum
-of revenue. 
+of revenue for each state. 
 * This ratio measures how many clicks that the stores need to generate an addtional unit of revenue.
-* Again, with lower RC_ratio, the stores in that state is more efficient becasue it would take fewer clicks to generate an addtional revenue. That is the reason why I create the rankings of the stores in each state by ascending RC_rate.
+* A little bit different from the previous case,with lower RC_ratio, the stores in that state is more efficient becasue it would take fewer clicks to generate an addtional revenue. That is the reason why I create the rankings of the stores in each state by ascending RC_rate.
 * Also, another important assumption that I make for this indicator is that in the Question 3, we can find there exist mismatch between marketing_data table and store_revenue table. I simply keep the rows of the merging result with non-NULL values instead of including the NULL values inside. Since CR ratio is a fraction, NULL value on the denominator is hard to deal with.
 ><pre>
 >WITH T1 AS(
 >SELECT date as date_m, 
 >	     geo as geo_m, 
 >        clicks
->        FROM marketing_data
+>FROM marketing_data
+>GROUP BY date_m,geo_m
 >),
 >T2 AS(
 >SELECT date as date_s,
@@ -324,7 +325,7 @@ of revenue.
 >SELECT geo_m as geo,                                       
 >        SUM(clicks) as clicks_sum, 
 >        SUM(revenue) as revenue_sum
->        FROM T1 FULL JOIN T2
+>FROM T1 FULL JOIN T2
 >ON date_m=date_s AND geo_m=geo_s
 >GROUP BY geo
 >)
