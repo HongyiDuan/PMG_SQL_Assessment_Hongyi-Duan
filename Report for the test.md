@@ -418,7 +418,10 @@ Here, the three temporary tables, although look complicated, are the tables that
 
 ### Conclusion For Question 4:
 * From the three indicators, we can see that stores in MN have the highest IC rate, and stores in CA have the lowest RC rate and highest revenue (from the output of question 5).
-* Stores in MN are the most efficient in transforming impressions into clicks, while stores in CA are most efficient in transforming clicks into revenue.
+* Stores in MN are the most efficient in transforming impressions into clicks, while stores in CA are most efficient in transforming clicks into revenue and also the state with highest revenue.
+* However, the time period of this dataset is too small to exclude some potential bias such as New Year Activities. Also, we can see from Q 4.1.2 and Q 4.2.2, the performance of some states, like CA, are not stable over time. CA is both the highest and the lowest of the RC rate.
+* Last but not least, RC rate is limited because it only connects the clicks with the revenue without considering other possible factors on revenue.
+* In conclustion, I think the first indicator is the best, leading to the most effcient ones to be the stores in the MN. But it might change after we can have a longer time period and revenue data for the stores in MN.
 ### [5] Question #5 (Challenge) Generate a query to rank in order the top 10 revenue producing states
 ​
 Answer: 
