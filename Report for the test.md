@@ -8,8 +8,11 @@ Answer: It is a very straightforward case. I simply use SUM command for the vari
 > <pre>
 > SELECT SUM(clicks) as sum_clicks
 > FROM marketing_data;
-Result:
-csvtomd Q1 Answer.csv
+### Result:
+| sum_clicks |
+| ---------- |
+| 1792       |
+
 
 ### [2]  Question #2 Generate a query to gather the sum of revenue by geo from the store_revenue table
 ​
@@ -20,8 +23,13 @@ Answer: This is also a straightforward case. Using a group by statement to gener
 > FROM store_revenue
 > GROUP BY store_location;
 
-I use the SUBSTRING command to extract only the state name from the column store_location so that it matches the geo variable form in the marketing_data table. 
-Result:
+I use the SUBSTRING command to extract only the state name from the column store_location so that it matches the geo variable form in the marketing_data table. <br/> 
+### Result:
+| geo	| revenue_geo |
+| ----|------------ |
+| CA	| 235237      |
+| TX	| 9629        |
+| NY	| 51984       |
 
 
 ### [3]  Question #3 Merge these two datasets so we can see impressions, clicks, and revenue together by date and geo. Please ensure all records from each table are accounted for.
@@ -61,7 +69,31 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 >        revenue
 >FROM T2 LEFT JOIN T1
 >ON T2.date=T1.date AND T1.geo=T2.geo;
-The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT JOIN command, if in the form A LEFT JOIN B, is  able to capture all the rows from  table A. So I union the table A (T1 LEFT JOIN T2) and the table B (T2 LEFT JOIN T1) to make sure I have got all the rows from the two tables: T1, T2 in my final results. 
+The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT JOIN command, if in the form A LEFT JOIN B, is  able to capture all the rows from  table A. So I union the table A (T1 LEFT JOIN T2) and the table B (T2 LEFT JOIN T1) to make sure I have got all the rows from the two tables: T1, T2 in my final results. <br/>
+### Result:
+| date	        |geo |impressions	|clicks	   |     revenue |
+| --------------|----|------------|----------|------------------ |
+| 1/1/2016 0:00	|TX	 |2532	      |  45	     |   654            |
+| 1/1/2016 0:00	|CA	 |3425	      |  63	     |   334            |
+| 1/1/2016 0:00	|NY	 |3532	      |  25	     |   284            |
+| 1/1/2016 0:00	|MN	 |1342	      | 784	     |   NULL           |
+| 1/2/2016 0:00	|TX	 |3643	      |  23	     |  5765           |
+| 1/2/2016 0:00	|CA	 |1354	      |  53	     |   465            |
+| 1/2/2016 0:00	|NY	 |4643	      |  85	     |   2574           |
+| 1/2/2016 0:00	|MN	 |2366	      |  85	     |   NULL           |
+| 1/3/2016 0:00	|TX	 |2353	      |  57	     |   423            |
+| 1/3/2016 0:00	|CA	 |5258	      |  36	     |   234334         |
+| 1/3/2016 0:00	|NY	 |4735	      |  63	     |   3479           |
+| 1/3/2016 0:00	|MN	 |5783	      |  87	     |   NULL           |
+| 1/4/2016 0:00	|TX	 |5783	      |  47	     |   2357           |
+| 1/4/2016 0:00	|CA	 |7854	      |  85	     |   36             |
+| 1/4/2016 0:00	|NY	 |4754	      |  36	     |   45289          |
+| 1/4/2016 0:00	|MN	 |9345	      |  24	     |   NULL           |
+| 1/5/2016 0:00	|TX	 |2535	      |  63	     |   427            |
+| 1/5/2016 0:00	|CA	 |4678	      |  73	     |   68             |
+| 1/5/2016 0:00	|NY	 |2364	      |  33	     |   358            |
+| 1/5/2016 0:00	|MN	 |3452	      |  25	     |   NULL           |
+| 1/6/2016 0:00	|TX	 |NULL	      |  NULL	   |     3            |
 #### Q 3.2 Version: Using UNION OF Two Tables including the brand_id
 * T1 still Follows the same logic with Q 3.1 Version above.
 * Since in this version, I decide to include the brand_id column from the store_revenue table. Right now, the revenue term refers to the amount of revenue by each state on each day, with different brand ids.
@@ -129,6 +161,25 @@ One thing to notice is that in the resulting table, for each date and geo, there
 >        revenue
 >FROM T1 FULL JOIN T2
 >ON date_m=date_s AND geo_m=geo_s;
+
+### Result:
+| date          | 	geo | 	impressions | 	clicks | 	revenue |
+| ------------- | ---- | ------------ | ------- | -------- |  
+| 1/1/2016 0:00 | 	TX  | 	2532        | 	45     | 	654     |  
+| 1/1/2016 0:00 | 	CA  | 	3425        | 	63     | 	334     |  
+| 1/1/2016 0:00 | 	NY  | 	3532        | 	25     | 	284     |  
+| 1/2/2016 0:00 | 	TX  | 	3643        | 	23     | 	5765    |  
+| 1/2/2016 0:00 | 	CA  | 	1354        | 	53     | 	465     |  
+| 1/2/2016 0:00 | 	NY  | 	4643        | 	85     | 	2574    |  
+| 1/3/2016 0:00 | 	TX  | 	2353        | 	57     | 	423     |  
+| 1/3/2016 0:00 | 	CA  | 	5258        | 	36     | 	234334  |  
+| 1/3/2016 0:00 | 	NY  | 	4735        | 	63     | 	3479    |  
+| 1/4/2016 0:00 | 	TX  | 	5783        | 	47     | 	2357    |  
+| 1/4/2016 0:00 | 	CA  | 	7854        | 	85     | 	36      |  
+| 1/4/2016 0:00 | 	NY  | 	4754        | 	36     | 	45289   |  
+| 1/5/2016 0:00 | 	TX  | 	2535        | 	63     | 	427     |  
+| 1/5/2016 0:00 | 	CA  | 	4678        | 	73     | 	68      |  
+| 1/5/2016 0:00 | 	NY  | 	2364        | 	33     | 	358     |  
 ### [4]  Question #4 In your opinion, what is the most efficient store and why?
 ​
 Answer: For this open-end question, I create three different indicators for measuring the effiency of the stores for each state. For each of the indicator, I will explain the definition and corresponding explanation of logics behind it.
@@ -150,6 +201,15 @@ Answer: For this open-end question, I create three different indicators for meas
 >        ROUND(impressions_sum/clicks_sum,2) as IC_ratio,
 >        DENSE_RANK() OVER (ORDER BY impressions_sum/clicks_sum ASC) as rankings_IC_rate
 >FROM T1;
+
+### Result:
+| geo | 	impressions_sum | 	clicks_sum | 	IC_ratio | 	rankings_IC_rate |
+| --- | ---------------- | ----------- | --------- | ----------------- |
+| MN  | 	22288           | 	1005       | 	22.18    | 	1                |
+| TX  | 	16846           | 	235        | 	71.69    | 	2                |
+| CA  | 	22569           | 	310        | 	72.8     | 	3                |
+| NY  | 	20028           | 	242        | 	82.76    | 	4                |
+
 #### Q 4.1.2 Version: First indicator, different scenario——> Impressions/clicks ratio, for each state and date
 * Following a similar structure with Q 4.1.1, I have measured the same IC rate, but the ratio right now is based on each state and each date.
 * I also rename the column to make them consistant with other codes in Question 4.
@@ -161,6 +221,30 @@ Answer: For this open-end question, I create three different indicators for meas
 >        ROUND(impressions/clicks,2) as IC_ratio,
 >        DENSE_RANK() OVER (ORDER BY impressions/clicks ASC) as rankings_IC_rate
 >FROM marketing_data;
+### Result:
+| geo | 	date          | 	impressions_sum | 	clicks_sum | 	IC_ratio | 	rankings_IC_rate |
+| --- | -------------- | ---------------- | ----------- | --------- | ----------------- |
+| MN  | 	1/4/2016 0:00 | 	9345            | 	24         | 	389.38	1 |
+| TX  | 	1/2/2016 0:00 | 	3643            | 	23         | 	158.39   | 	2                |
+| CA  | 	1/3/2016 0:00 | 	5258            | 	36         | 	146.06   | 	3                |
+| NY  | 	1/1/2016 0:00 | 	3532            | 	25         | 	141.28   | 	4                |
+| MN  | 	1/5/2016 0:00 | 	3452            | 	25         | 	138.08   | 	5                |
+| NY  | 	1/4/2016 0:00 | 	4754            | 	36         | 	132.06   | 	6                |
+| TX  | 	1/4/2016 0:00 | 	5783            | 	47         | 	123.04   | 	7                |
+| CA  | 	1/4/2016 0:00 | 	7854            | 	85         | 	92.4     | 	8                |
+| NY  | 	1/3/2016 0:00 | 	4735            | 	63         | 	75.16    | 	9                |
+| NY  | 	1/5/2016 0:00 | 	2364            | 	33         | 	71.64    | 	10               |
+| MN  | 	1/3/2016 0:00 | 	5783            | 	87         | 	66.47    | 	11               |
+| CA  | 	1/5/2016 0:00 | 	4678            | 	73         | 	64.08    | 	12               |
+| TX  | 	1/1/2016 0:00 | 	2532            | 	45         | 	56.27    | 	13               |
+| NY  | 	1/2/2016 0:00 | 	4643            | 	85         | 	54.62    | 	14               |
+| CA  | 	1/1/2016 0:00 | 	3425            | 	63         | 	54.37    | 	15               |
+| TX  | 	1/3/2016 0:00 | 	2353            | 	57         | 	41.28    | 	16               |
+| TX  | 	1/5/2016 0:00 | 	2535            | 	63         | 	40.24    | 	17               |
+| MN  | 	1/2/2016 0:00 | 	2366            | 	85         | 	27.84    | 	18               |
+| CA  | 	1/2/2016 0:00 | 	1354            | 	53         | 	25.55    | 	19               |
+| MN  | 	1/1/2016 0:00 | 	1342            | 	784        | 	1.71     | 	20               |
+
 #### Q 4.2.1 Version: CR_Rate by each state
 * The second indicator that I use to measure the efficiency is the CR ratio, which is defined as the sum of clicks divided by the sum
 of revenue. 
@@ -197,7 +281,12 @@ of revenue.
 >FROM T3;
 
 Here, the three temporary tables, although look complicated, are the tables that I create use FULL JOIN in Question 3.3. Since this ratio requires the revenue column from the store_revenue table and the clicks column from the marketing_data table, I need the merging table to contain all the non-NULL values.
-
+### Result:
+| geo | 	clicks_sum | 	revenue_sum | 	cr_transition_rate | 	RANKINGS_CR |
+| --- | ----------- | ------------ | ------------------- | ------------ |
+| CA  | 	310        | 	235237      | 	0.00132            | 	1           |
+| NY  | 	242        | 	51984       | 	0.00466	           |        2     |
+| TX  | 	235        | 	9626        | 	0.02441            | 	3           |
 #### Q 4.2.2 Version: CR_Rate by each state and each date
 * Similar to Q 4.1.2, I release the date as another column.
 ><pre>
@@ -260,6 +349,12 @@ Answer:
 >FROM T1)
 >SELECT * FROM T2  
 >WHERE RANKINGS_REVENUE<=10;
+### Result:
+| State | 	revenue | 	RANKINGS_REVENUE |
+| ----- | -------- | ----------------- |
+| CA    | 	235237  | 	1                |
+| NY    | 	51984   | 	2                |
+| TX    | 	9629    | 	3                |
 
 
 
