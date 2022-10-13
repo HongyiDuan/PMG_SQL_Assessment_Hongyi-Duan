@@ -1,7 +1,9 @@
 # SQL Challenge
 
 ## Below are my SQL statements for each question. 
-## Note: All the statements below are written in mysql environment.
+## Note 1: All the statements below are written in mysql environment.
+## Note 2: For each question, I have attached not only my statements but also the output tables belows. As for the specific output table, you can find that in the csv files in this repository.
+## Note 3: Each bullet point in my answer explains the logic of my statement,limitations of the statements, and the explanation of the output
 ### [1] Question #1 Generate a query to get the sum of the clicks of the marketing data
 ​ 
 Answer: It is a very straightforward case. I simply use SUM command for the variable clicks in the marketing_data table.
