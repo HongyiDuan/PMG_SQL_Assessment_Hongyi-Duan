@@ -302,8 +302,8 @@ Answer: For this open-end question, I create three different indicators for meas
 | 1/4/2016 0:00 | 	MN  | 	9345            | 	24         | 	0.26        | 	20                  |
 
 #### Q 4.2.1 Version: CR_Rate by each state
-* The second indicator that I use to measure the efficiency is the CR ratio, which is defined as the sum of clicks divided by the sum
-of revenue for each state. 
+* The second indicator that I use to measure the efficiency is the CR ratio, which is defined as the sum of revenue divided by the sum
+of clicks for each state. 
 * This ratio measures how much addtional revenue one can get with an addtional click on average.
 * Same as above, with higher RC_ratio, the stores in that state is more efficient becasue it would take clicks to generate more revenue. That is the reason why I create the rankings of the stores in each state by descending RC_rate.
 * Also, another important assumption that I make for this indicator is that in the Question 3, we can find there exist mismatch between marketing_data table and store_revenue table. I simply keep the rows of the merging result with non-NULL values instead of including the NULL values inside. Since CR ratio is a fraction, NULL value on the denominator is hard to deal with.
@@ -372,27 +372,27 @@ Here, the three temporary tables, although look complicated, are the tables that
 >        date, 
 >        clicks_sum, 
 >        revenue_sum,
->	     ROUND(clicks_sum/revenue_sum,5) as cr_transition_rate,
->        DENSE_RANK() OVER (ORDER BY clicks_sum/revenue_sum ASC) as RANKINGS_CR
+>	     ROUND(revenue_sum/click_sum,5) as cr_transition_rate_sd,
+>        DENSE_RANK() OVER (ORDER BY revenue_sum/click_sum DESC) as RANKINGS_CR_sd
 >FROM T3;
 ### Result:
-| geo | 	date          | 	clicks_sum | 	revenue_sum | 	cr_transition_rate | 	RANKINGS_CR |
-| --- | -------------- | ----------- | ------------ | ------------------- | ------------ |
-| CA  | 	1/3/2016 0:00 | 	36         | 	234334      | 	0.00015            | 	1           |
-| NY  | 	1/4/2016 0:00 | 	36         | 	45289       | 	0.00079	           | 2            |
-| TX  | 	1/2/2016 0:00 | 	23         | 	5765        | 	0.00399	           | 3            |
-| NY  | 	1/3/2016 0:00 | 	63         | 	3479        | 	0.01811	           | 4            |
-| TX  | 	1/4/2016 0:00 | 	47         | 	2357        | 	0.01994            | 	5           |
-| NY  | 	1/2/2016 0:00 | 	85         | 	2574        | 	0.03302            | 	6           |
-| TX  | 	1/1/2016 0:00 | 	45         | 	654         | 	0.06881            | 	7           |
-| NY  | 	1/1/2016 0:00 | 	25         | 	284         | 	0.08803            | 	8           |
-| NY  | 	1/5/2016 0:00 | 	33         | 	358         | 	0.09218            | 	9           |
-| CA  | 	1/2/2016 0:00 | 	53         | 	465         | 	0.11398            | 	10          |
-| TX  | 	1/3/2016 0:00 | 	57         | 	423         | 	0.13475            | 	11          |
-| TX  | 	1/5/2016 0:00 | 	63         | 	427         | 	0.14754            | 	12          |
-| CA  | 	1/1/2016 0:00 | 	63         | 	334         | 	0.18862            | 	13          |
-| CA  | 	1/5/2016 0:00 | 	73         | 	68          | 	1.07353	           | 14           |
-| CA  | 	1/4/2016 0:00 | 	85         | 	36          | 	2.36111            | 	15          |
+| geo | 	date          | 	clicks_sum | 	revenue_sum | 	cr_transition_rate_sd | 	RANKINGS_CR_sd |
+| --- | -------------- | ----------- | ------------ | ---------------------- | --------------- |
+| CA  | 	1/3/2016 0:00 | 	36         | 	234334      | 	6509.27778            | 	1              |
+| NY  | 	1/4/2016 0:00 | 	36         | 	45289       | 	1258.02778            | 	2              |
+| TX  | 	1/2/2016 0:00 | 	23         | 	5765        | 	250.65217             | 	3              |
+| NY  | 	1/3/2016 0:00 | 	63         | 	3479        | 	55.22222              | 	4              |
+| TX  | 	1/4/2016 0:00 | 	47         | 	2357        | 	50.14894              | 	5              |
+| NY  | 	1/2/2016 0:00 | 	85         | 	2574        | 	30.28235              | 	6              |
+| TX  | 	1/1/2016 0:00 | 	45         | 	654         | 	14.53333              | 	7              |
+| NY  | 	1/1/2016 0:00 | 	25         | 	284         | 	11.36                 | 	8              |
+| NY  | 	1/5/2016 0:00 | 	33         | 	358         | 	10.84848              | 	9              |
+| CA  | 	1/2/2016 0:00 | 	53         | 	465         | 	8.77358               | 	10             |
+| TX  | 	1/3/2016 0:00 | 	57         | 	423         | 	7.42105               | 	11             |
+| TX  | 	1/5/2016 0:00 | 	63         | 	427         | 	6.77778               | 	12             |
+| CA  | 	1/1/2016 0:00 | 	63         | 	334         | 	5.30159               | 	13             |
+| CA  | 	1/5/2016 0:00 | 	73         | 	68          | 	0.93151               | 	14             |
+| CA  | 	1/4/2016 0:00 | 	85         | 	36          | 	0.42353               | 	15             |
 #### Q 4.3 Version: Revenue Based Ranking WITH BRAND_ID Included
 * The third indicator that I use is the revenue for stores in each state.
 * Since under this indicatory, the higher the revenue, the more efficient the stores are, I rank the states by the sum of revenue in descending order. I also include the brand_id to see how the three kinds of brands perform.
