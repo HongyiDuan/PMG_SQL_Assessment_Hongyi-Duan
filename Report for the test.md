@@ -260,7 +260,8 @@ Answer: For this open-end question, I create three different indicators for meas
 | NY  | 	20028           | 	242        | 	1.21     | 	4                |
 
 #### Q 4.1.2 Version: First indicator, different scenario——> Impressions/clicks ratio, for each state and date
-* Following a similar structure with Q 4.1.1, I have measured the same IC rate, but the ratio right now is based on each state and each date.
+* Following a similar structure with Q 4.1.1, I have measured the same IC ratio, but the ratio right now is based on each state and each date.
+* The reason to include the date variable is to see the "fluctuations" of the IC ratio among the 5 day interval. Is it stable for each state or a state would have a very high IC ratio for one day and lower ones for the remaining.
 * I also rename the column to make them consistant with other codes in Question 4.
 ><pre>
 >SELECT date,
@@ -414,6 +415,9 @@ Here, the three temporary tables, although look complicated, are the tables that
 | TX    | 	1        | 	3608        | 	5                      |
 | CA    | 	1        | 	510         | 	6                      |
 | TX    | 	3        | 	3           | 	7                      |
+
+### Conclusion For Question 4:
+* 
 ### [5] Question #5 (Challenge) Generate a query to rank in order the top 10 revenue producing states
 ​
 Answer: 
