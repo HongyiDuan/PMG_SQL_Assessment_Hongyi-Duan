@@ -191,6 +191,50 @@ of revenue.
 >FROM T3;
 
 Here, the three temporary tables, although look complicated, are the tables that I create use FULL JOIN in Question 3.3. Since this ratio requires the revenue column from the store_revenue table and the clicks column from the marketing_data table, I need the merging table to contain all the non-NULL values.
+
+#### Q 4.2.2 Version: CR_Rate by each state and each date
+* Similar to Q 4.1.2, I release the date as another column.
+><pre>
+>WITH T1 AS(
+>SELECT date as date_m, 
+>        geo as geo_m,
+>        clicks
+>FROM marketing_data
+>),
+>T2 AS(
+>SELECT date as date_s, 
+>        SUBSTRING(store_location,15) as geo_s, 
+>        SUM(revenue) as revenue
+>FROM store_revenue
+>GROUP BY date, geo_s
+>),
+>T3 AS(
+>SELECT geo_m as geo, 
+>        date_m as date,
+>        clicks as clicks_sum, 
+>        revenue as revenue_sum
+>FROM T1 FULL JOIN T2
+>ON date_m=date_s AND geo_m=geo_s
+>)
+>SELECT geo, 
+>        date, 
+>        clicks_sum, 
+>        revenue_sum,
+>	     ROUND(clicks_sum/revenue_sum,5) as cr_transition_rate,
+>        DENSE_RANK() OVER (ORDER BY clicks_sum/revenue_sum ASC) as RANKINGS_CR
+>FROM T3;
+#### Q 4.3 Version: Revenue Based Ranking WITH BRAND_ID Included
+* Since under this indicatory, the higher the revenue, the more efficient the stores are, I rank the states by the sum of revenue in descending order. I also include the brand_id to see how the three kinds of brands perform.
+><pre>
+>SELECT *, DENSE_RANK() OVER (ORDER BY revenue_sum DESC) as RANKINGS_REVENUE_BRAND
+>FROM
+>(SELECT SUBSTRING(store_location,15) as geo_s, 
+>		brand_id, 
+>         SUM(revenue) as revenue_sum
+>FROM store_revenue
+>GROUP BY geo_s, brand_id
+>) AS cte;
+* The third indicator that I use is the revenue for stores in each state.
 * Question #5 (Challenge)
  Generate a query to rank in order the top 10 revenue producing states
 ​
