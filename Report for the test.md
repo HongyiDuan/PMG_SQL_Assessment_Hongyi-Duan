@@ -133,7 +133,45 @@ The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT
 >ON T2.date=T1.date AND T1.geo=T2.geo;
 
 One thing to notice is that in the resulting table, for each date and geo, there would be two rows sharing the same number of impressions and clicks. The only difference between the two rows is the revenue by different brand_ids. That is because in the marketing_data table, there are no columns named brand_id and I can not identify the specific amount of impressions and clicks for each brand. As a result, I change the name for the impressions and clicks to impressions_statewise and clicks_statewise so that the reader can understand.
-
+### Result:
+| date          | 	geo | 	impressions_statewise | 	clicks_statewise | 	brand_id|	revenue |
+| ------------- | ---- | ---------------------- | ----------------- | ----------------- | ------- |
+| 1/1/2016 0:00 | 	TX  | 	2532                  | 	45               | 	1                | 	420    |
+| 1/1/2016 0:00 | 	TX  | 	2532                  | 	45               | 	2                | 	234    |
+| 1/1/2016 0:00 | 	CA  | 	3425                  | 	63               | 	1                | 	100    |
+| 1/1/2016 0:00 | 	CA  | 	3425                  | 	63               | 	2                | 	234    |
+| 1/1/2016 0:00 | 	NY  | 	3532                  | 	25               | 	1                | 	142    |
+| 1/1/2016 0:00 | 	NY  | 	3532                  | 	25               | 	2                | 	142    |
+| 1/1/2016 0:00 | 	MN  | 	1342                  | 	784              | 	NULL             | 	NULL   |
+| 1/2/2016 0:00 | 	TX  | 	3643                  | 	23               | 	1                | 	2342   |
+| 1/2/2016 0:00 | 	TX  | 	3643                  | 	23               | 	2                | 	3423   |
+| 1/2/2016 0:00 | 	CA  | 	1354                  | 	53               | 	1                | 	231    |
+| 1/2/2016 0:00 | 	CA  | 	1354                  | 	53               | 	2                | 	234    |
+| 1/2/2016 0:00 | 	NY  | 	4643                  | 	85               | 	1                | 	232    |
+| 1/2/2016 0:00 | 	NY  | 	4643                  | 	85               | 	2                | 	2342   |
+| 1/2/2016 0:00 | 	MN  | 	2366                  | 	85               | 	NULL             | 	NULL   |
+| 1/3/2016 0:00 | 	TX  | 	2353                  | 	57               | 	1                | 	420    |
+| 1/3/2016 0:00 | 	TX  | 	2353                  | 	57               | 	2                | 	3      |
+| 1/3/2016 0:00 | 	CA  | 	5258                  | 	36               | 	1                | 	100    |
+| 1/3/2016 0:00 | 	CA  | 	5258                  | 	36               | 	2                | 	234234 |
+| 1/3/2016 0:00 | 	NY  | 	4735                  | 	63               | 	1                | 	3245   |
+| 1/3/2016 0:00 | 	NY  | 	4735                  | 	63               | 	2                | 	234    |
+| 1/3/2016 0:00 | 	MN  | 	5783                  | 	87               | 	NULL             | 	NULL   |
+| 1/4/2016 0:00 | 	TX  | 	5783                  | 	47               | 	1                | 	3      |
+| 1/4/2016 0:00 | 	TX  | 	5783                  | 	47               | 	2                | 	2354   |
+| 1/4/2016 0:00 | 	CA  | 	7854                  | 	85               | 	1                | 	34     |
+| 1/4/2016 0:00 | 	CA  | 	7854                  | 	85               | 	2                | 	2      |
+| 1/4/2016 0:00 | 	NY  | 	4754                  | 	36               | 	1                | 	54     |
+| 1/4/2016 0:00 | 	NY  | 	4754                  | 	36               | 	2                | 	45235  |
+| 1/4/2016 0:00 | 	MN  | 	9345                  | 	24               | 	NULL             | 	NULL   |
+| 1/5/2016 0:00 | 	TX  | 	2535                  | 	63               | 	1                | 	423    |
+| 1/5/2016 0:00 | 	TX  | 	2535                  | 	63               | 	2                | 	4      |
+| 1/5/2016 0:00 | 	CA  | 	4678                  | 	73               | 	1                | 	45     |
+| 1/5/2016 0:00 | 	CA  | 	4678                  | 	73               | 	2                | 	23     |
+| 1/5/2016 0:00 | 	NY  | 	2364                  | 	33               | 	1                | 	234    |
+| 1/5/2016 0:00 | 	NY  | 	2364                  | 	33               | 	2                | 	124    |
+| 1/5/2016 0:00 | 	MN  | 	3452                  | 	25               | 	NULL             | 	NULL   |
+| 1/6/2016 0:00 | 	TX  | 	NULL                  | 	NULL             | 	3                | 	3      |
 #### Q 3.3 Version: Using FULL JOIN method that only contains Non-NULL rows
 * Since I use mysql to finish this assessment, there does not exist a FULL OUTER JOIN command.The FULL JOIN command only produces the rows that satisfy the ON conditions with non-NULL entries.
 * Same as Q 3.1 above, in T1 I select the four columns needed for the FULL JOIN.
@@ -318,7 +356,26 @@ Here, the three temporary tables, although look complicated, are the tables that
 >	     ROUND(clicks_sum/revenue_sum,5) as cr_transition_rate,
 >        DENSE_RANK() OVER (ORDER BY clicks_sum/revenue_sum ASC) as RANKINGS_CR
 >FROM T3;
+#### Result:
+| geo | 	date          | 	clicks_sum | 	revenue_sum | 	cr_transition_rate | 	RANKINGS_CR |
+| --- | -------------- | ----------- | ------------ | ------------------- | ------------ |
+| CA  | 	1/3/2016 0:00 | 	36         | 	234334      | 	0.00015            | 	1           |
+| NY  | 	1/4/2016 0:00 | 	36         | 	45289       | 	0.00079	           | 2            |
+| TX  | 	1/2/2016 0:00 | 	23         | 	5765        | 	0.00399	           | 3            |
+| NY  | 	1/3/2016 0:00 | 	63         | 	3479        | 	0.01811	           | 4            |
+| TX  | 	1/4/2016 0:00 | 	47         | 	2357        | 	0.01994            | 	5           |
+| NY  | 	1/2/2016 0:00 | 	85         | 	2574        | 	0.03302            | 	6           |
+| TX  | 	1/1/2016 0:00 | 	45         | 	654         | 	0.06881            | 	7           |
+| NY  | 	1/1/2016 0:00 | 	25         | 	284         | 	0.08803            | 	8           |
+| NY  | 	1/5/2016 0:00 | 	33         | 	358         | 	0.09218            | 	9           |
+| CA  | 	1/2/2016 0:00 | 	53         | 	465         | 	0.11398            | 	10          |
+| TX  | 	1/3/2016 0:00 | 	57         | 	423         | 	0.13475            | 	11          |
+| TX  | 	1/5/2016 0:00 | 	63         | 	427         | 	0.14754            | 	12          |
+| CA  | 	1/1/2016 0:00 | 	63         | 	334         | 	0.18862            | 	13          |
+| CA  | 	1/5/2016 0:00 | 	73         | 	68          | 	1.07353	           | 14           |
+| CA  | 	1/4/2016 0:00 | 	85         | 	36          | 	2.36111            | 	15          |
 #### Q 4.3 Version: Revenue Based Ranking WITH BRAND_ID Included
+* The third indicator that I use is the revenue for stores in each state.
 * Since under this indicatory, the higher the revenue, the more efficient the stores are, I rank the states by the sum of revenue in descending order. I also include the brand_id to see how the three kinds of brands perform.
 ><pre>
 >SELECT *, DENSE_RANK() OVER (ORDER BY revenue_sum DESC) as RANKINGS_REVENUE_BRAND
@@ -329,7 +386,16 @@ Here, the three temporary tables, although look complicated, are the tables that
 >FROM store_revenue
 >GROUP BY geo_s, brand_id
 >) AS cte;
-* The third indicator that I use is the revenue for stores in each state.
+### Result:
+| geo_s | 	brand_id | 	revenue_sum | 	RANKINGS_REVENUE_BRAND |
+| ----- | --------- | ------------ | ----------------------- |
+| CA    | 	2        | 	234727      | 	1                      |
+| NY    | 	2        | 	48077       | 	2                      |
+| TX    | 	2        | 	6018        | 	3                      |
+| NY    | 	1        | 	3907        | 	4                      |
+| TX    | 	1        | 	3608        | 	5                      |
+| CA    | 	1        | 	510         | 	6                      |
+| TX    | 	3        | 	3           | 	7                      |
 #### [5] Question #5 (Challenge) Generate a query to rank in order the top 10 revenue producing states
 ​
 Answer: 
