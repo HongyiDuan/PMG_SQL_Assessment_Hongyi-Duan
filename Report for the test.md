@@ -1,7 +1,7 @@
 # SQL Challenge: Answered by Hongyi Duan
 
 ## Below are my SQL statements for each question. 
-## Note 1: All the statements below are written in mysql environment.
+## Note 1: All the statements below are written in mysql environment (I use the mysql workbench as my environment).
 ## Note 2: For each question, I have attached not only my statements but also the output tables belows. As for the specific output table, you can find that in the csv files in this repository.
 ## Note 3: Each bullet point in my answer explains the logic of my statement,limitations of the statements, and the explanation of the output
 ## Note 4: For all the rankings in this project, I use DENSE RANKING to make sure it is easier to understand and readers can get the rankings immediately instead of doing mathematics when equal case involved.
