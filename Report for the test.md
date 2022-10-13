@@ -356,7 +356,7 @@ Here, the three temporary tables, although look complicated, are the tables that
 >	     ROUND(clicks_sum/revenue_sum,5) as cr_transition_rate,
 >        DENSE_RANK() OVER (ORDER BY clicks_sum/revenue_sum ASC) as RANKINGS_CR
 >FROM T3;
-#### Result:
+### Result:
 | geo | 	date          | 	clicks_sum | 	revenue_sum | 	cr_transition_rate | 	RANKINGS_CR |
 | --- | -------------- | ----------- | ------------ | ------------------- | ------------ |
 | CA  | 	1/3/2016 0:00 | 	36         | 	234334      | 	0.00015            | 	1           |
@@ -396,7 +396,7 @@ Here, the three temporary tables, although look complicated, are the tables that
 | TX    | 	1        | 	3608        | 	5                      |
 | CA    | 	1        | 	510         | 	6                      |
 | TX    | 	3        | 	3           | 	7                      |
-#### [5] Question #5 (Challenge) Generate a query to rank in order the top 10 revenue producing states
+### [5] Question #5 (Challenge) Generate a query to rank in order the top 10 revenue producing states
 ​
 Answer: 
 * As usual, I create a temporary table to save the store_location and revenue of each store_location by a groupby command.
