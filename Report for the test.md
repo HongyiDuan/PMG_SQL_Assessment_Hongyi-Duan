@@ -304,8 +304,8 @@ Answer: For this open-end question, I create three different indicators for meas
 #### Q 4.2.1 Version: CR_Rate by each state
 * The second indicator that I use to measure the efficiency is the CR ratio, which is defined as the sum of clicks divided by the sum
 of revenue for each state. 
-* This ratio measures how many clicks that the stores need to generate an addtional unit of revenue.
-* A little bit different from the previous case,with lower RC_ratio, the stores in that state is more efficient becasue it would take fewer clicks to generate an addtional revenue. That is the reason why I create the rankings of the stores in each state by ascending RC_rate.
+* This ratio measures how much addtional revenue one can get with an addtional click on average.
+* Same as above, with higher RC_ratio, the stores in that state is more efficient becasue it would take clicks to generate more revenue. That is the reason why I create the rankings of the stores in each state by descending RC_rate.
 * Also, another important assumption that I make for this indicator is that in the Question 3, we can find there exist mismatch between marketing_data table and store_revenue table. I simply keep the rows of the merging result with non-NULL values instead of including the NULL values inside. Since CR ratio is a fraction, NULL value on the denominator is hard to deal with.
 ><pre>
 >WITH T1 AS(
@@ -333,17 +333,17 @@ of revenue for each state.
 >SELECT geo, 
 >        cicks_sum,
 >        revenue_sum,
->        ROUND(clicks_sum/revenue_sum,5) as cr_transition_rate,
->        DENSE_RANK() OVER (ORDER BY clicks_sum/revenue_sum ASC) as RANKINGS_CR
+>        ROUND(revenue_sum/clicks_sum,5) as cr_transition_rate,
+>        DENSE_RANK() OVER (ORDER BY revenue_sum/clicks_sum DESC) as RANKINGS_CR
 >FROM T3;
 
 Here, the three temporary tables, although look complicated, are the tables that I create use FULL JOIN in Question 3.3. Since this ratio requires the revenue column from the store_revenue table and the clicks column from the marketing_data table, I need the merging table to contain all the non-NULL values.
 ### Result:
 | geo | 	clicks_sum | 	revenue_sum | 	cr_transition_rate | 	RANKINGS_CR |
 | --- | ----------- | ------------ | ------------------- | ------------ |
-| CA  | 	310        | 	235237      | 	0.00132            | 	1           |
-| NY  | 	242        | 	51984       | 	0.00466	           |        2     |
-| TX  | 	235        | 	9626        | 	0.02441            | 	3           |
+| CA  | 	310        | 	235237      | 	758.82903          | 	1           |
+| NY  | 	242        | 	51984       | 	214.80992          | 	2           |
+| TX  | 	235        | 	9626        | 	40.9617            | 	        3   |
 #### Q 4.2.2 Version: CR_Rate by each state and each date
 * Similar to Q 4.1.2, I release the date as another column.
 ><pre>
@@ -417,7 +417,8 @@ Here, the three temporary tables, although look complicated, are the tables that
 | TX    | 	3        | 	3           | 	7                      |
 
 ### Conclusion For Question 4:
-* 
+* From the three indicators, we can see that stores in MN have the highest IC rate, and stores in CA have the lowest RC rate and highest revenue (from the output of question 5).
+* Stores in MN are the most efficient in transforming impressions into clicks, while stores in CA are most efficient in transforming clicks into revenue.
 ### [5] Question #5 (Challenge) Generate a query to rank in order the top 10 revenue producing states
 ​
 Answer: 
