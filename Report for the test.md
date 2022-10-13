@@ -6,6 +6,7 @@
 ## Note 3: Each bullet point in my answer explains the logic of my statement,limitations of the statements, and the explanation of the output
 ## Note 4: For all the rankings in this project, I use DENSE RANKING to make sure it is easier to understand and readers can get the rankings immediately instead of doing mathematics when equal case involved.
 ## Note 5: The output that I get is to use export button in the mysql workbench. It automatically generates a csv file, which makes the date column in a little bit different format compared to those in marketing_data and store_revenue.
+## Note 6: For the brand_id in the store_revenue table, I assume it is the revenue achieved by the brands of products instead of the store_id.
 ### [1] Question #1 Generate a query to get the sum of the clicks of the marketing data
 ​ 
 Answer: It is a very straightforward case. I simply use SUM command for the variable clicks in the marketing_data table.
