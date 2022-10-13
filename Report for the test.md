@@ -230,9 +230,11 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 ### [4]  Question #4 In your opinion, what is the most efficient store and why?
 ​
 Answer: For this open-end question, I create three different indicators for measuring the effiency of the stores for each state. For each of the indicator, I will explain the definition and corresponding explanation of logics behind it.
-#### Q 4.1.1 Version: First indicator——> Impressions/clicks ratio, for each state only
-* IC_ratio (Impressions_clicks ratio) is defined as on average, how many impressions the stores in each state need to gain an additional click.
-* With lower IC_ratio, the stores in that state is more efficient becasue it would take fewer impressions to generate an addtional click. That is the reason why I create the rankings of the stores in each state by ascending IC_rate order.
+### An important assumption that I make for this question is that since the store_revenue does not contain a column named store_id, I measure all three indicators on the state level. Then, my effciency in this problem would be "the efficiency of all the stores in each state". 
+### If I assume the id column in the store_revenue table to be the store_id, then the outcome would offer no use since each store can only offer their performance at a specific date instead of during a period.
+#### Q 4.1.1 Version: First indicator——> Impressions_clicks ratio, for each state only
+* IC_ratio (Impressions_clicks ratio) is defined as the percentage of people clicks after watching the advertisements of the stores (impressions).
+* Thus, by definition, a higher Impressions_clicks ratio reflects a higher effiency since more clicks the stores would earn for each advertisement they post or some other marketing methods.
 * Same as above, I create a temporary table T1 storing the sum of impressions and clicks for each state during the total time periods provided in the marketing_data table.
 ><pre>
 >WITH T1 AS( 
@@ -245,52 +247,58 @@ Answer: For this open-end question, I create three different indicators for meas
 >SELECT geo,
 >        impressions_sum, 
 >        clicks_sum,
->        ROUND(impressions_sum/clicks_sum,2) as IC_ratio,
->        DENSE_RANK() OVER (ORDER BY impressions_sum/clicks_sum ASC) as rankings_IC_rate
+>        ROUND(100*clicks_sum/impressions_sum,2) as IC_ratio,
+>        DENSE_RANK() OVER (ORDER BY clicks_sum/impressions_sum DESC) as rankings_IC_rate
 >FROM T1;
 
 ### Result:
 | geo | 	impressions_sum | 	clicks_sum | 	IC_ratio | 	rankings_IC_rate |
 | --- | ---------------- | ----------- | --------- | ----------------- |
-| MN  | 	22288           | 	1005       | 	22.18    | 	1                |
-| TX  | 	16846           | 	235        | 	71.69    | 	2                |
-| CA  | 	22569           | 	310        | 	72.8     | 	3                |
-| NY  | 	20028           | 	242        | 	82.76    | 	4                |
+| MN  | 	22288           | 	1005       | 	4.51     | 	1                |
+| TX  | 	16846           | 	235        | 	1.39     | 	2                |
+| CA  | 	22569           | 	310        | 	1.37     | 	3                |
+| NY  | 	20028           | 	242        | 	1.21     | 	4                |
 
 #### Q 4.1.2 Version: First indicator, different scenario——> Impressions/clicks ratio, for each state and date
 * Following a similar structure with Q 4.1.1, I have measured the same IC rate, but the ratio right now is based on each state and each date.
 * I also rename the column to make them consistant with other codes in Question 4.
 ><pre>
->SELECT geo,
->        date,
->        impressions as impressions_sum,
->        clicks as clicks_sum,
->        ROUND(impressions/clicks,2) as IC_ratio,
->        DENSE_RANK() OVER (ORDER BY impressions/clicks ASC) as rankings_IC_rate
->FROM marketing_data;
+>SELECT date,
+>       geo,
+>       impressions_sum,
+>       clicks_sum,
+>       ROUND(100*clicks_sum/impressions_sum,2) as IC_ratio_sd,
+>       DENSE_RANK() OVER (ORDER BY clicks_sum/impressions_sum DESC) as rankings_IC_rate_sd
+>FROM
+>(SELECT date,
+>       geo,
+>       SUM(impressions) as impressions_sum,
+>      SUM(clicks) as clicks_sum
+>FROM marketing_data
+>GROUP BY geo,date) as cte;
 ### Result:
-| geo | 	date          | 	impressions_sum | 	clicks_sum | 	IC_ratio | 	rankings_IC_rate |
-| --- | -------------- | ---------------- | ----------- | --------- | ----------------- |
-| MN  | 	1/4/2016 0:00 | 	9345            | 	24         | 	389.38	1 |
-| TX  | 	1/2/2016 0:00 | 	3643            | 	23         | 	158.39   | 	2                |
-| CA  | 	1/3/2016 0:00 | 	5258            | 	36         | 	146.06   | 	3                |
-| NY  | 	1/1/2016 0:00 | 	3532            | 	25         | 	141.28   | 	4                |
-| MN  | 	1/5/2016 0:00 | 	3452            | 	25         | 	138.08   | 	5                |
-| NY  | 	1/4/2016 0:00 | 	4754            | 	36         | 	132.06   | 	6                |
-| TX  | 	1/4/2016 0:00 | 	5783            | 	47         | 	123.04   | 	7                |
-| CA  | 	1/4/2016 0:00 | 	7854            | 	85         | 	92.4     | 	8                |
-| NY  | 	1/3/2016 0:00 | 	4735            | 	63         | 	75.16    | 	9                |
-| NY  | 	1/5/2016 0:00 | 	2364            | 	33         | 	71.64    | 	10               |
-| MN  | 	1/3/2016 0:00 | 	5783            | 	87         | 	66.47    | 	11               |
-| CA  | 	1/5/2016 0:00 | 	4678            | 	73         | 	64.08    | 	12               |
-| TX  | 	1/1/2016 0:00 | 	2532            | 	45         | 	56.27    | 	13               |
-| NY  | 	1/2/2016 0:00 | 	4643            | 	85         | 	54.62    | 	14               |
-| CA  | 	1/1/2016 0:00 | 	3425            | 	63         | 	54.37    | 	15               |
-| TX  | 	1/3/2016 0:00 | 	2353            | 	57         | 	41.28    | 	16               |
-| TX  | 	1/5/2016 0:00 | 	2535            | 	63         | 	40.24    | 	17               |
-| MN  | 	1/2/2016 0:00 | 	2366            | 	85         | 	27.84    | 	18               |
-| CA  | 	1/2/2016 0:00 | 	1354            | 	53         | 	25.55    | 	19               |
-| MN  | 	1/1/2016 0:00 | 	1342            | 	784        | 	1.71     | 	20               |
+| date          | 	geo | 	impressions_sum | 	clicks_sum | 	IC_ratio_sd | 	rankings_IC_rate_sd |
+| ------------- | ---- | ---------------- | ----------- | ------------ | -------------------- |
+| 1/1/2016 0:00 | 	MN  | 	1342            | 	784        | 	58.42       | 	1                   |
+| 1/2/2016 0:00 | 	CA  | 	1354            | 	53         | 	3.91        | 	2                   |
+| 1/2/2016 0:00 | 	MN  | 	2366            | 	85         | 	3.59        | 	3                   |
+| 1/5/2016 0:00 | 	TX  | 	2535            | 	63         | 	2.49        | 	4                   |
+| 1/3/2016 0:00 | 	TX  | 	2353            | 	57         | 	2.42        | 	5                   |
+| 1/1/2016 0:00 | 	CA  | 	3425            | 	63         | 	1.84        | 	6                   |
+| 1/2/2016 0:00 | 	NY  | 	4643            | 	85         | 	1.83        | 	7                   |
+| 1/1/2016 0:00 | 	TX  | 	2532            | 	45         | 	1.78        | 	8                   |
+| 1/5/2016 0:00 | 	CA  | 	4678            | 	73         | 	1.56        | 	9                   |
+| 1/3/2016 0:00 | 	MN  | 	5783            | 	87         | 	1.5         | 	10                  |
+| 1/5/2016 0:00 | 	NY  | 	2364            | 	33         | 	1.4         | 	11                  |
+| 1/3/2016 0:00 | 	NY  | 	4735            | 	63         | 	1.33        | 	12                  |
+| 1/4/2016 0:00 | 	CA  | 	7854            | 	85         | 	1.08        | 	13                  |
+| 1/4/2016 0:00 | 	TX  | 	5783            | 	47         | 	0.81        | 	14                  |
+| 1/4/2016 0:00 | 	NY  | 	4754            | 	36         | 	0.76        | 	15                  |
+| 1/5/2016 0:00 | 	MN  | 	3452            | 	25         | 	0.72        | 	16                  |
+| 1/1/2016 0:00 | 	NY  | 	3532            | 	25         | 	0.71        | 	17                  |
+| 1/3/2016 0:00 | 	CA  | 	5258            | 	36         | 	0.68        | 	18                  |
+| 1/2/2016 0:00 | 	TX  | 	3643            | 	23         | 	0.63        | 	19                  |
+| 1/4/2016 0:00 | 	MN  | 	9345            | 	24         | 	0.26        | 	20                  |
 
 #### Q 4.2.1 Version: CR_Rate by each state
 * The second indicator that I use to measure the efficiency is the CR ratio, which is defined as the sum of clicks divided by the sum
