@@ -1,4 +1,4 @@
-# SQL Challenge
+# SQL Challenge: Answered by Hongyi Duan
 
 ## Below are my SQL statements for each question. 
 ## Note 1: All the statements below are written in mysql environment.
@@ -39,7 +39,7 @@ I use the SUBSTRING command to extract only the state name from the column store
 Answer: As mentioned at the beginning, I write my commands in MySQL environment. Since MySQL does not have a FULL OUTER JOIN command, I mainly use the UNION of two LEFT JOIN tables to cover all the observations from the two table. I have used three methods for answering Question 3, with the initial two to be the UNION of two LEFT JOIN tables and the last to be the FULL JOIN method.
 #### Q 3.1 Version: Using UNION of two LEFT JOIN tables
 * Here is the first method of UNION two LEFT JOIN tables T1 and T2. 
-* I create T1 to select the four columns that I need from the marketing_data table. 
+* I create T1 to select the four columns that I need from the marketing_data table. Although whether adding the group by statement for T1 or not does not affect the outcome table, I still choose to add it to make sure that if future data comes in with the same date and state, I am able to absorb the observation in the sum.
 * T2 is used to select the date, geo, and the sum of revenue group by date and geo (combing the revenue of all the brands sold on a specific day at a specific state).
 ><pre>
 > WITH T1 AS(
@@ -48,6 +48,7 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 >        clicks,
 >        impressions
 > FROM marketing_data
+> GROUP BY date, geo
 >),
 >T2 AS(                                                                                  
 >SELECT date,                                                                        
@@ -71,7 +72,9 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 >        revenue
 >FROM T2 LEFT JOIN T1
 >ON T2.date=T1.date AND T1.geo=T2.geo;
-The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT JOIN command, if in the form A LEFT JOIN B, is  able to capture all the rows from  table A. So I union the table A (T1 LEFT JOIN T2) and the table B (T2 LEFT JOIN T1) to make sure I have got all the rows from the two tables: T1, T2 in my final results. <br/>
+* The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT JOIN command, if in the form A LEFT JOIN B, is  able to capture all the rows from  table A. 
+* So I union the table A (T1 LEFT JOIN T2) and the table B (T2 LEFT JOIN T1) to make sure I have got all the rows from the two tables: T1, T2 in my final results.
+* That is the reason why in the resulting table, we can see 4 different states and 6 different dates.
 ### Result:
 | date	        |geo |impressions	|clicks	   |     revenue |
 | --------------|----|------------|----------|------------------ |
@@ -107,6 +110,7 @@ The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT
 >       clicks, 
 >       impressions
 >FROM marketing_data
+>GROUP BY date,geo
 >),
 >T2 AS(                                                     
 >SELECT date,                                              
@@ -134,7 +138,9 @@ The reason to use the UNION command is to combine two LEFT JOIN Tables. The LEFT
 >FROM T2 LEFT JOIN T1
 >ON T2.date=T1.date AND T1.geo=T2.geo;
 
-One thing to notice is that in the resulting table, for each date and geo, there would be two rows sharing the same number of impressions and clicks. The only difference between the two rows is the revenue by different brand_ids. That is because in the marketing_data table, there are no columns named brand_id and I can not identify the specific amount of impressions and clicks for each brand. As a result, I change the name for the impressions and clicks to impressions_statewise and clicks_statewise so that the reader can understand.
+* One thing to notice is that in the resulting table, for each date and geo, there would be two rows sharing the same number of impressions and clicks.
+* The only difference between the two rows is the revenue by different brand_ids. That is because in the marketing_data table, there are no columns named brand_id and I can not identify the specific amount of impressions and clicks for each brand. 
+* As a result, I change the name for the impressions and clicks to impressions_statewise and clicks_statewise so that the reader can understand.
 ### Result:
 | date          | 	geo | 	impressions_statewise | 	clicks_statewise | 	brand_id|	revenue |
 | ------------- | ---- | ---------------------- | ----------------- | ----------------- | ------- |
@@ -186,6 +192,7 @@ One thing to notice is that in the resulting table, for each date and geo, there
 >        clicks, 
 >        impressions
 >FROM marketing_data
+>GROUP BY date,geo
 >),
 >T2 AS( 
 >SELECT date as date_s, 
