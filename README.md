@@ -7,4 +7,4 @@ There are three key sets of files, including:
 ​ 
 * The mysql script, named "PMG SQL Assessment", for generating all the necessary outputs for the 5 questions.
 ​ 
-* A folder, named "", which includes all the csv outputs from the mysql script.
+* A folder, named "Code Result", which includes all the csv outputs from the mysql script.
