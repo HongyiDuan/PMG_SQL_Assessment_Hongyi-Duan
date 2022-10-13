@@ -7,6 +7,7 @@
 ## Note 4: For all the rankings in this project, I use DENSE RANKING to make sure it is easier to understand and readers can get the rankings immediately instead of doing mathematics when equal case involved.
 ## Note 5: The output that I get is to use export button in the mysql workbench. It automatically generates a csv file, which makes the date column in a little bit different format compared to those in marketing_data and store_revenue.
 ## Note 6: For the brand_id in the store_revenue table, I assume it is the revenue achieved by the brands of products instead of the store_id.
+## Note 7: For the initialization part of the problem, you can check my mysql script for the code. I follow the CREATE TABLE command by the instruction and insert the values for two tables using the csv files provided.
 ### [1] Question #1 Generate a query to get the sum of the clicks of the marketing data
 ​ 
 Answer: It is a very straightforward case. I simply use SUM command for the variable clicks in the marketing_data table.
@@ -48,8 +49,8 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 > WITH T1 AS(
 > SELECT date,
 >        geo,
->        clicks,
->        impressions
+>        SUM(clicks) as clicks,
+>        SUM(impressions) as impressions
 > FROM marketing_data
 > GROUP BY date, geo
 >),
@@ -110,8 +111,8 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 > WITH T1 AS(
 >SELECT date,                                           
 >       geo, 
->       clicks, 
->       impressions
+>       SUM(clicks) as clicks, 
+>       SUM(impressions) as impressions
 >FROM marketing_data
 >GROUP BY date,geo
 >),
@@ -192,8 +193,8 @@ Answer: As mentioned at the beginning, I write my commands in MySQL environment.
 >WITH T1 AS(
 >SELECT date as date_m,
 >        geo as geo_m,
->        clicks, 
->        impressions
+>        SUM(clicks) as clicks, 
+>        SUM(impressions) as impressions
 >FROM marketing_data
 >GROUP BY date,geo
 >),
@@ -236,7 +237,7 @@ Answer: For this open-end question, I create three different indicators for meas
 ### An important assumption that I make for this question is that since the store_revenue does not contain a column named store_id, I measure all three indicators on the state level. Then, my effciency in this problem would be "the efficiency of all the stores in each state". 
 ### If I assume the id column in the store_revenue table to be the store_id, then the outcome would offer no use since each store can only offer their performance at a specific date instead of during a period.
 #### Q 4.1.1 Version: First indicator: Impressions_clicks through ratio, for each state only
-* IC_ratio (Impressions_clicks ratio) is defined as the percentage of people clicks after watching the advertisements of the stores (impressions).
+* IC_ratio (Impressions_clicks ratio) is defined as the percentage of people click after watching the advertisements of the stores (impressions).
 * Thus, by definition, a higher Impressions_clicks ratio reflects a higher effiency since more clicks the stores would earn for each advertisement they post or some other marketing methods.
 * Same as above, I create a temporary table T1 storing the sum of impressions and clicks for each state during the total time periods provided in the marketing_data table.
 ><pre>
